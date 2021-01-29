@@ -1,0 +1,73 @@
+import java.util.*;
+import java.io.*;
+/**
+ * Program that reads tokens from file wordpuzzle.dat and searches
+ * for the search words through the rest of the file.
+ *
+ * @author Ronaldo Ramirez
+ * @version 09/26/20
+ */
+public class wordSearch{
+   public static void main(String[] args){
+      //calls run() method 
+      run();
+   }
+   public static void run(){
+   
+      //try catch statement to open file
+      try{
+         //create file and scanneer object
+         File file = new File("wordpuzzle.dat");
+         Scanner read = new Scanner(file);
+         //create array of size 6 called needles and load search words into it
+         String[] needles = new String[6];
+         for(int i = 0; i < needles.length; i++){
+            needles[i] = read.nextLine();
+         }
+         //create array of size 8 called haystack and load puzzle lines into it
+         String[] haystack = new String[8];
+         //skips the asterisks so that it start reading through the haystack
+         read.nextLine();
+         for(int i = 0; i < 8; i++){
+            haystack[i] = read.nextLine();
+         }
+         //create a row array which is going to store the row at which the word was found
+         int[] row = new int[8];
+         //create a column array which is going to store the column at which the word was found
+         int[] column = new int[20];
+         //for each needle element loop through the haystack to find the word
+         for(int i = 0; i < needles.length; i++){
+            for(int x = 0; x < 8; x++){
+               //if the haysatck word contains the search word
+               if(haystack[x].contains(needles[i])){
+                  //we create a new varaible  which is going to store the column at which it was found
+                  int col = haystack[x].indexOf(needles[i]);
+                  //store the col value in an array
+                  column[i] = col + 1;
+                  //store the x value at which the word was found in an array
+                  row[i] = x + 1;
+               }
+            }
+         }
+         //loop through the search words in order to print them out
+         for(int i = 0; i < needles.length; i++){
+            //if the word is at column 0 and row 0 which dont exist we display a special message
+            if(row[i] == 0 && column[i] == 0){
+              System.out.println(needles[i] + " was not found"); 
+            }
+            //else we print out the search word and where it was found
+            else{
+            System.out.println(needles[i] + " was found At row " + row[i] + " and column " + column[i]);
+            }
+         }
+         if(!file.exists()){
+            //throw exception when a file is not found
+            throw new FileNotFoundException();
+         }
+      }
+      catch(FileNotFoundException e){
+         //display a message when the file is not found
+         System.out.println("File Not Found");
+      }
+   }
+}
